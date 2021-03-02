@@ -34,6 +34,13 @@ class Quiz extends Component {
     }
 
     onAnswerClickHandler = (answerId) => {
+        if(this.state.answerState){
+            const key = Object.keys(this.state.answerState)[0]
+            if(this.state.answerState[key] === 'succses'){
+                return 
+            }
+        }
+
         console.log('AnswerId: ', answerId)
 
         const question = this.state.quiz[this.state.activeQuestion]
@@ -41,7 +48,7 @@ class Quiz extends Component {
         if (question.rightAnswerId === answerId){
 
             this.setState({
-                answerState: {[answerId] : 'sucsses'}
+                answerState: {[answerId] : 'succses'}
             })
 
             const timeout = window.setTimeout(() =>{
