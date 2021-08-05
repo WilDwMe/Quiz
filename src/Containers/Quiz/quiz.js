@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import classes from './quiz.module.css';
 import ActiveQuiz from '../../components/ActiveQuiz/ActiveQuiz';
+import FinishedQuiz from '../../components/FinishedQuiz/FinishedQuiz';
 
 class Quiz extends Component {
 
     state = {
+        results: {}, // {[id] : success error}
+        isFinished: false,
         activeQuestion: 0,
         answerState: null, 
         quiz: [
@@ -41,19 +44,24 @@ class Quiz extends Component {
             }
         }
 
-        console.log('AnswerId: ', answerId)
 
         const question = this.state.quiz[this.state.activeQuestion]
+        const results = this.state.results
         
         if (question.rightAnswerId === answerId){
-
+            if (!results[question.id]) {
+                results[question.id] = 'succses'
+            }
             this.setState({
-                answerState: {[answerId] : 'succses'}
+                answerState: {[answerId] : 'succses'},
+                results
             })
 
             const timeout = window.setTimeout(() =>{
                 if(this.isQuizFinished()){
-                    console.log('Finished')
+                    this.setState({
+                        isFinished: true
+                    })
 
                 } else {
                     this.setState({
@@ -66,8 +74,10 @@ class Quiz extends Component {
             }, 1000)
 
         } else {
+            results[question.id] = 'error'
             this.setState({
-                answerState: {[answerId] : 'error'}
+                answerState: {[answerId] : 'error'},
+                results
             })
         }
     }
@@ -83,7 +93,14 @@ class Quiz extends Component {
         <div className={classes.Quiz}>
             <div className={classes.QuizWrapper}>
             <h1>Ответьте на все вопросы</h1>
-                <ActiveQuiz
+            {
+            this.state.isFinished
+            ? <FinishedQuiz
+                results = {this.state.results}
+                quiz = {this.state.quiz}
+           
+            />
+            :   <ActiveQuiz
                 answers={this.state.quiz[this.state.activeQuestion].answers}
                 question={this.state.quiz[this.state.activeQuestion].question}
                 onAnswerClick = {this.onAnswerClickHandler}
@@ -92,6 +109,7 @@ class Quiz extends Component {
                 state={this.state.answerState}
 
                 />
+            }
             </div>
         </div>
         </>
