@@ -1,19 +1,15 @@
-import React, {Component} from 'react';
-import Layout from './hoc/Layout/Layout';
-import Quiz from './Containers/Quiz/quiz';
+import React, {Component} from 'react'
+import Layout from './hoc/Layout/Layout'
+import Quiz from './Containers/Quiz/Quiz'
 
 class App extends Component {
-
-  
-  render(){
-
-
+  render() {
     return (
-     <Layout>
-       <Quiz/>
-     </Layout>
-    );
+      <Layout>
+        <Quiz />
+      </Layout>
+    )
   }
 }
 
-export default App;
+export default App
